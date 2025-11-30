@@ -1,0 +1,120 @@
+openapi: 3.0.3
+info:
+  title: ERP Sales Module API
+  description: API untuk manajemen penjualan, stok, dan pengiriman.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081
+tags:
+  - name: Orders
+    description: Manajemen siklus hidup pesanan
+paths:
+  /orders:
+    post:
+      tags:
+        - Orders
+      summary: Buat Pesanan Baru
+      description: Membuat pesanan baru untuk pelanggan tertentu.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                  format: uuid
+                  example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      responses:
+        '201':
+          description: Pesanan berhasil dibuat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: string
+                    format: uuid
+
+  /orders/{id}/items:
+    post:
+      tags:
+        - Orders
+      summary: Tambah Barang ke Pesanan
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ID Pesanan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                  format: uuid
+                  example: "123e4567-e89b-12d3-a456-426614174000"
+                quantity:
+                  type: integer
+                  example: 1
+      responses:
+        '200':
+          description: Barang berhasil ditambahkan
+        '500':
+          description: Stok tidak cukup atau Barang tidak ada
+
+  /orders/{id}/confirm:
+    post:
+      tags:
+        - Orders
+      summary: Konfirmasi Pesanan
+      description: Mengunci pesanan agar siap dikirim.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ID Pesanan
+      responses:
+        '200':
+          description: Pesanan dikonfirmasi
+
+  /orders/{id}/ship:
+    post:
+      tags:
+        - Orders
+      summary: Kirim Pesanan (Fulfillment)
+      description: Mengubah status menjadi SHIPPED dan mencatat pengiriman.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ID Pesanan
+      responses:
+        '200':
+          description: Barang berhasil dikirim
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  trackingId:
+                    type: string
+                  status:
+                    type: string
+                    example: "SHIPPED"

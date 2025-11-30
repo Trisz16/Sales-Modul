@@ -1,0 +1,32 @@
+o17:41:27,150 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.5.16
+à17:41:27,150 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1e4114d1 - No custom configurators were discovered as a service.
+§17:41:27,150 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1e4114d1 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+≤17:41:27,150 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1e4114d1 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+t17:41:27,160 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+o17:41:27,160 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+◊17:41:27,170 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1e4114d1 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 10 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+†17:41:27,170 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1e4114d1 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+Æ17:41:27,170 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1e4114d1 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+s17:41:27,172 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+π17:41:27,174 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/C:/Users/agamg/IdeaProjects/ERD%20Sales/build/resources/main/logback.xml]
+ó17:41:27,176 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@416506fa - Resource [logback.xml] occurs multiple times on the classpath.
+ 17:41:27,176 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@416506fa - Resource [logback.xml] occurs at [file:/C:/Users/agamg/IdeaProjects/ERD%20Sales/build/resources/main/logback.xml]
+À17:41:27,176 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@416506fa - Resource [logback.xml] occurs at [jar:file:/C:/Users/agamg/.gradle/caches/modules-2/files-2.1/io.swagger.codegen.v3/swagger-codegen-generators/1.0.59/8eac74c48b513b53719a4db632126253bf147213/swagger-codegen-generators-1.0.59.jar!/logback.xml]
+v17:41:27,334 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+ü17:41:27,334 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+∂17:41:27,343 |-INFO in ch.qos.logback.core.model.processor.ImplicitModelHandler - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+ç17:41:27,450 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - BEWARE: Writing to the console can be very slow. Avoid logging to the 
+ç17:41:27,450 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - console in production environments, especially in high volume systems.
+}17:41:27,450 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also https://logback.qos.ch/codes.html#slowConsole
+}17:41:27,450 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+à17:41:27,450 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+à17:41:27,455 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.eclipse.jetty] to INFO
+17:41:27,455 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [io.netty] to INFO
+m17:41:27,455 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@fbe217a - End of configuration.
+ã17:41:27,458 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@2163a916 - Registering current configuration as safe fallback point
+€17:41:27,458 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1e4114d1 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 288 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+®2025-11-29 17:41:28.137 [DefaultDispatcher-worker-2 @call-context#3] INFO  io.ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+Å2025-11-29 17:41:28.735 [DefaultDispatcher-worker-2 @call-context#3] INFO  io.ktor.test - Application started in 0.614 seconds.
+z2025-11-29 17:41:28.742 [DefaultDispatcher-worker-3 @coroutine#7] INFO  io.ktor.test - Responding at http://localhost:80
+|2025-11-29 17:41:28.743 [DefaultDispatcher-worker-3 @coroutine#7] INFO  io.ktor.test - Responding at https://localhost:443

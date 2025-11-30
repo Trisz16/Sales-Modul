@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP Sales Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .step-active { border-left: 4px solid #3b82f6; background-color: #eff6ff; }
+        .step-inactive { border-left: 4px solid transparent; opacity: 0.5; pointer-events: none; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 h-screen flex flex-col">
+
+<header class="bg-white shadow-sm border-b border-gray-200 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="bg-blue-600 text-white p-2 rounded-lg font-bold text-xl">ERP</div>
+            <h1 class="text-xl font-semibold text-gray-700">Modul Penjualan & Pengiriman</h1>
+        </div>
+        <div class="text-sm text-gray-500">
+            Status Server: <span id="serverStatus" class="font-bold text-orange-500">Mengecek...</span>
+        </div>
+    </div>
+</header>
+
+<main class="flex-1 container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <div class="lg:col-span-2 space-y-6">
+
+        <div id="step1" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 step-active transition-all">
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-full text-sm">1</span>
+                Buat Pesanan Baru
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Pelanggan</label>
+                    <select id="customerId" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Budi Santoso (Seed Data)</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="createOrder()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                        + Buat Order
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="step2" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 step-inactive transition-all">
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-full text-sm">2</span>
+                Isi Keranjang Belanja
+            </h2>
+            <div class="flex flex-col gap-4">
+                <div class="bg-gray-50 p-3 rounded border text-sm text-gray-600">
+                    Order Aktif ID: <span id="displayOrderId" class="font-mono font-bold text-blue-600">-</span>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Produk</label>
+                        <select id="productId" class="w-full p-2 border border-gray-300 rounded-lg">
+                            <option value="123e4567-e89b-12d3-a456-426614174000">Laptop Asus ROG - Rp 25.000.000</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Qty</label>
+                        <input type="number" id="quantity" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-lg">
+                    </div>
+                </div>
+                <button onclick="addItem()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                    Tambah ke Keranjang
+                </button>
+            </div>
+        </div>
+
+        <div id="step3" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 step-inactive transition-all">
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-full text-sm">3</span>
+                Checkout & Pengiriman
+            </h2>
+            <div class="grid grid-cols-2 gap-4">
+                <button id="btnConfirm" onclick="confirmOrder()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition">
+                    🔒 Konfirmasi Pesanan
+                </button>
+                <button id="btnShip" onclick="shipOrder()" disabled class="bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg cursor-not-allowed transition">
+                    🚚 Kirim Barang (Ship)
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="lg:col-span-1 space-y-6">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h3 class="text-sm font-bold text-gray-400 uppercase mb-2">Status Terkini</h3>
+            <div id="currentStatus" class="text-2xl font-bold text-gray-300">MENUNGGU...</div>
+            <div id="trackingInfo" class="mt-4 hidden p-3 bg-green-50 border border-green-200 rounded text-green-700 text-sm">
+                <strong>Resi Pengiriman:</strong><br>
+                <span id="trackingId" class="font-mono text-xs"></span>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 p-4 rounded-xl shadow-lg text-green-400 font-mono text-xs h-96 overflow-y-auto" id="consoleLog">
+            <div class="text-gray-500 border-b border-gray-700 pb-2 mb-2">System Logs...</div>
+        </div>
+
+        <button onclick="resetUI()" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-600 py-2 rounded-lg text-sm">
+            Reset UI (Mulai Baru)
+        </button>
+    </div>
+
+</main>
+
+<script>
+    const API_URL = "http://localhost:8081";
+    let currentOrderId = null;
+
+    // Cek Koneksi Server saat load
+    window.onload = async () => {
+        try {
+            // Kita coba fetch ke /swagger untuk cek server hidup
+            await fetch(`${API_URL}/swagger`);
+            document.getElementById('serverStatus').innerText = "ONLINE 🟢";
+            document.getElementById('serverStatus').classList.replace('text-orange-500', 'text-green-500');
+            log("System ready. Server connected.");
+        } catch (e) {
+            document.getElementById('serverStatus').innerText = "OFFLINE 🔴";
+            document.getElementById('serverStatus').classList.replace('text-orange-500', 'text-red-500');
+            log("Error: Cannot connect to backend. Is IntelliJ running?");
+        }
+    };
+
+    // 1. Create Order
+    async function createOrder() {
+        const customerId = document.getElementById('customerId').value;
+        log(`Creating order for customer: ${customerId}...`);
+
+        try {
+            const res = await fetch(`${API_URL}/orders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ customerId: customerId })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                currentOrderId = data.orderId;
+                document.getElementById('displayOrderId').innerText = currentOrderId;
+                log(`SUCCESS! Order Created. ID: ${currentOrderId}`);
+                updateStatus("PENDING");
+
+                // Activate Step 2
+                activateStep('step2');
+                document.getElementById('step1').classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                log(`ERROR: ${JSON.stringify(data)}`);
+            }
+        } catch (e) {
+            log(`NETWORK ERROR: ${e.message}`);
+        }
+    }
+
+    // 2. Add Item
+    async function addItem() {
+        if (!currentOrderId) return alert("Buat Order dulu!");
+
+        const productId = document.getElementById('productId').value;
+        const qty = parseInt(document.getElementById('quantity').value);
+
+        log(`Adding item... Product: ${productId}, Qty: ${qty}`);
+
+        try {
+            const res = await fetch(`${API_URL}/orders/${currentOrderId}/items`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId: productId, quantity: qty })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                log(`SUCCESS! Item Added.`);
+                // Activate Step 3 preview
+                document.getElementById('step3').classList.remove('step-inactive');
+                document.getElementById('step3').classList.add('step-active');
+            } else {
+                log(`ERROR: ${data.error || JSON.stringify(data)}`);
+            }
+        } catch (e) {
+            log(`ERROR: ${e.message}`);
+        }
+    }
+
+    // 3. Confirm Order
+    async function confirmOrder() {
+        if (!currentOrderId) return;
+        log(`Confirming order ${currentOrderId}...`);
+
+        try {
+            const res = await fetch(`${API_URL}/orders/${currentOrderId}/confirm`, { method: 'POST' });
+            const data = await res.json();
+
+            if (res.ok) {
+                log(`SUCCESS! Order Confirmed.`);
+                updateStatus("CONFIRMED");
+
+                // Disable Confirm, Enable Ship
+                document.getElementById('btnConfirm').disabled = true;
+                document.getElementById('btnConfirm').classList.add('bg-gray-400', 'cursor-not-allowed');
+                document.getElementById('btnConfirm').classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+
+                const btnShip = document.getElementById('btnShip');
+                btnShip.disabled = false;
+                btnShip.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                btnShip.classList.add('bg-orange-500', 'hover:bg-orange-600');
+
+                // Lock Step 2
+                document.getElementById('step2').classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                log(`ERROR: ${data.error}`);
+            }
+        } catch (e) {
+            log(`ERROR: ${e.message}`);
+        }
+    }
+
+    // 4. Ship Order
+    async function shipOrder() {
+        if (!currentOrderId) return;
+        log(`Shipping order ${currentOrderId}...`);
+
+        try {
+            const res = await fetch(`${API_URL}/orders/${currentOrderId}/ship`, { method: 'POST' });
+            const data = await res.json();
+
+            if (res.ok) {
+                log(`SUCCESS! Order Shipped.`);
+                updateStatus("SHIPPED 🚚");
+
+                // Show Tracking
+                document.getElementById('trackingInfo').classList.remove('hidden');
+                document.getElementById('trackingId').innerText = data.trackingId;
+
+                // Disable button
+                const btnShip = document.getElementById('btnShip');
+                btnShip.disabled = true;
+                btnShip.classList.add('bg-gray-400', 'cursor-not-allowed');
+            } else {
+                log(`ERROR: ${data.error}`);
+            }
+        } catch (e) {
+            log(`ERROR: ${e.message}`);
+        }
+    }
+
+    // Helpers
+    function log(msg) {
+        const consoleDiv = document.getElementById('consoleLog');
+        const time = new Date().toLocaleTimeString();
+        consoleDiv.innerHTML += `<div class="mb-1"><span class="text-gray-500">[${time}]</span> ${msg}</div>`;
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+    }
+
+    function updateStatus(status) {
+        const el = document.getElementById('currentStatus');
+        el.innerText = status;
+        el.className = "text-2xl font-bold " + (
+            status === 'PENDING' ? 'text-blue-500' :
+                status === 'CONFIRMED' ? 'text-indigo-500' :
+                    status.includes('SHIPPED') ? 'text-green-500' : 'text-gray-300'
+        );
+    }
+
+    function activateStep(stepId) {
+        const el = document.getElementById(stepId);
+        el.classList.remove('step-inactive');
+        el.classList.add('step-active');
+    }
+
+    function resetUI() {
+        window.location.reload();
+    }
+</script>
+</body>
+</html>

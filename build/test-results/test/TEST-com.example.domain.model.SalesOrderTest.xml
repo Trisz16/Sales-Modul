@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.domain.model.SalesOrderTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2025-11-29T10:41:28.933Z" hostname="AGAM" time="0.004">
+  <properties/>
+  <testcase name="should calculate total correctly when adding products" classname="com.example.domain.model.SalesOrderTest" time="0.003"/>
+  <testcase name="should confirm order successfully" classname="com.example.domain.model.SalesOrderTest" time="0.0"/>
+  <testcase name="should prevent confirming empty order" classname="com.example.domain.model.SalesOrderTest" time="0.0"/>
+  <testcase name="should prevent adding items to confirmed order" classname="com.example.domain.model.SalesOrderTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
